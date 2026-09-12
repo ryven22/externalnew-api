@@ -36,7 +36,8 @@ struct LicenseState: Codable {
 final class LicenseService: ObservableObject {
 
     // ⚠️ Replace with your Vercel deployment URL
-    static let apiBaseURL = "https://regsxd-keys.vercel.app"
+    static let apiBaseURL = "https://regsxddatabaseeky-ryven2.vercel.app"
+    
 
     static let shared = LicenseService()
 
