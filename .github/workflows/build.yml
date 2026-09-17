@@ -42,11 +42,11 @@ jobs:
         echo "Found app: $APP_PATH"
         mkdir -p Payload
         cp -R "$APP_PATH" Payload/
-        zip -r REGSXD.ipa Payload
+        zip -r REGSXD_EXTERNAL_PRO.ipa Payload
 
     - name: Upload IPA
       uses: actions/upload-artifact@v4
       with:
-        name: REGSXD-unsigned-ipa
-        path: REGSXD.ipa
+        name: REGSXD-EXTERNAL-PRO-unsigned-ipa
+        path: REGSXD_EXTERNAL_PRO.ipa
         retention-days: 7
