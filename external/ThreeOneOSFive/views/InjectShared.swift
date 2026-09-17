@@ -2,6 +2,13 @@ import SwiftUI
 
 // MARK: - Shared Models
 
+struct InjectFileItem: Identifiable {
+    let id = UUID()
+    let targetPath: String
+    let resourceFileName: String
+    let resourceSubfolder: String
+}
+
 struct InjectButton: Identifiable {
     let id = UUID()
     let name: String
@@ -11,6 +18,19 @@ struct InjectButton: Identifiable {
     let resourceFileName: String
     let resourceSubfolder: String
     var launchAfterInject: Bool = false
+    var additionalFiles: [InjectFileItem] = []
+
+    var allFiles: [InjectFileItem] {
+        var list = [
+            InjectFileItem(
+                targetPath: targetPath,
+                resourceFileName: resourceFileName,
+                resourceSubfolder: resourceSubfolder
+            )
+        ]
+        list.append(contentsOf: additionalFiles)
+        return list
+    }
 }
 
 struct OpenGameButton: Identifiable {

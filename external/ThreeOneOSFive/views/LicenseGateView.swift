@@ -89,10 +89,19 @@ struct KeyEntryView: View {
                     .padding(.bottom, 20)
 
                     // Title
-                    Text("REGSXD EXTERNAL")
-                        .font(.system(size: 22, weight: .black))
-                        .foregroundStyle(.white)
-                        .kerning(1.2)
+                    HStack(spacing: 8) {
+                        Text("REGS EXTERNAL")
+                            .font(.system(size: 22, weight: .black))
+                            .foregroundStyle(.white)
+                            .kerning(1.2)
+                        Text("PRO")
+                            .font(.system(size: 13, weight: .black))
+                            .foregroundStyle(.white)
+                            .padding(.horizontal, 7)
+                            .padding(.vertical, 3)
+                            .background(Color.red)
+                            .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
+                    }
 
                     // Divider
                     HStack(spacing: 8) {

@@ -119,14 +119,14 @@ struct AppDataBrowserView: View {
                     let workspaceDestination = FileBrowserDestination(
                         containerPath: workspaceURL.path,
                         startPath: workspaceURL.path,
-                        title: "REGSXD EXTERNAL",
+                        title: "REGS EXTERNAL PRO",
                         bundleID: nil
                     )
                     NavigationLink(value: workspaceDestination) {
                         HStack(spacing: 10) {
                             AppRowIcon(systemName: "folder.fill")
                             VStack(alignment: .leading, spacing: 2) {
-                                Text("REGSXD EXTERNAL")
+                                Text("REGS EXTERNAL PRO")
                                     .font(.subheadline.weight(.semibold))
                                 Text(language.text("browser.workspace_subtitle"))
                                     .font(.caption)

@@ -155,27 +155,8 @@ enum AppUpdateChecker {
     }
 
     static func check() async -> Offer? {
-        var request = URLRequest(url: apiURL)
-        request.timeoutInterval = 15
-        request.setValue("REGSXD EXTERNAL", forHTTPHeaderField: "User-Agent")
-        request.setValue("application/vnd.github+json", forHTTPHeaderField: "Accept")
-        do {
-            let (data, response) = try await URLSession.shared.data(for: request)
-            guard let http = response as? HTTPURLResponse, (200..<300).contains(http.statusCode) else {
-                return nil
-            }
-            let decoded = try JSONDecoder().decode(GitHubRelease.self, from: data)
-            let remote = normalize(decoded.tagName)
-            guard !remote.isEmpty,
-                  isNewer(remote, than: currentVersion),
-                  UserDefaults.standard.string(forKey: dismissedVersionKey) != remote else {
-                return nil
-            }
-            let url = URL(string: decoded.htmlURL) ?? fallbackURL
-            return Offer(version: remote, url: url)
-        } catch {
-            return nil
-        }
+        // Disabled: do not check for updates from third-party repository
+        return nil
     }
 
     private struct GitHubRelease: Decodable {

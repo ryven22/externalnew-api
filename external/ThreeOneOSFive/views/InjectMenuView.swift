@@ -94,6 +94,21 @@ struct InjectMenuView: View {
                     resourceFileName: "assetindexer.PENojQAQf9a1l6Dzjs0n1Z3rtVU~3D",
                     resourceSubfolder: "patches/aimdrag pro safe free fire max"
                 ),
+                InjectButton(
+                    name: "ESP & AIMBOT",
+                    category: "AIMBOT",
+                    bundleID: target.rawValue,
+                    targetPath: "Documents/Assembly-CSharp-patch.bytes",
+                    resourceFileName: "Assembly-CSharp-patch.bytes",
+                    resourceSubfolder: "patches/external esp",
+                    additionalFiles: [
+                        InjectFileItem(
+                            targetPath: "Documents/localConfig.json",
+                            resourceFileName: "localConfig.json",
+                            resourceSubfolder: "patches/external esp"
+                        )
+                    ]
+                ),
             ]
         }
     }
@@ -275,22 +290,29 @@ struct InjectMenuView: View {
     private func inject(_ button: InjectButton) {
         guard working != button.id else { return }
 
-        let resourceURL: URL? = {
-            let bundleBase = URL(fileURLWithPath: Bundle.main.bundlePath)
-            let subfolderPath = bundleBase
-                .appendingPathComponent(button.resourceSubfolder)
-                .appendingPathComponent(button.resourceFileName)
-            if FileManager.default.fileExists(atPath: subfolderPath.path) {
-                return subfolderPath
-            }
-            let rootPath = bundleBase.appendingPathComponent(button.resourceFileName)
-            return FileManager.default.fileExists(atPath: rootPath.path) ? rootPath : nil
-        }()
+        let filesToInject = button.allFiles
+        let bundleBase = URL(fileURLWithPath: Bundle.main.bundlePath)
 
-        guard let resourceURL else {
-            results[button.id] = .failed("File not found in bundle")
-            log("\(button.name) [\(selectedTarget.shortTag)] — inject error: file not found")
-            return
+        // Pre-resolve all source URLs
+        var resolvedFiles: [(source: URL, targetPath: String)] = []
+        for item in filesToInject {
+            let subfolderPath = bundleBase
+                .appendingPathComponent(item.resourceSubfolder)
+                .appendingPathComponent(item.resourceFileName)
+            let sourceURL: URL? = {
+                if FileManager.default.fileExists(atPath: subfolderPath.path) {
+                    return subfolderPath
+                }
+                let rootPath = bundleBase.appendingPathComponent(item.resourceFileName)
+                return FileManager.default.fileExists(atPath: rootPath.path) ? rootPath : nil
+            }()
+
+            guard let source = sourceURL else {
+                results[button.id] = .failed("File not found: \(item.resourceFileName)")
+                log("\(button.name) [\(selectedTarget.shortTag)] — inject error: \(item.resourceFileName) not found")
+                return
+            }
+            resolvedFiles.append((source: source, targetPath: item.targetPath))
         }
 
         working = button.id
@@ -313,23 +335,25 @@ struct InjectMenuView: View {
             try? await Task.sleep(nanoseconds: 5_000_000_000)
             do {
                 let containerURL = try resolveContainer(bundleID: button.bundleID)
-                let targetURL = containerURL.appendingPathComponent(button.targetPath)
-                let dir = targetURL.deletingLastPathComponent()
-                try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
-                let data = try Data(contentsOf: resourceURL)
-                let staging = dir.appendingPathComponent(".regsxd-inject-\(UUID().uuidString)")
-                try data.write(to: staging, options: .atomic)
-                let renameResult = rename(staging.path, targetURL.path)
-                if renameResult != 0 {
-                    let errMsg = String(cString: strerror(errno))
-                    try? FileManager.default.removeItem(at: staging)
-                    throw InjectError.renameFailed(errMsg)
+                for file in resolvedFiles {
+                    let targetURL = containerURL.appendingPathComponent(file.targetPath)
+                    let dir = targetURL.deletingLastPathComponent()
+                    try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+                    let data = try Data(contentsOf: file.source)
+                    let staging = dir.appendingPathComponent(".regsxd-inject-\(UUID().uuidString)")
+                    try data.write(to: staging, options: .atomic)
+                    let renameResult = rename(staging.path, targetURL.path)
+                    if renameResult != 0 {
+                        let errMsg = String(cString: strerror(errno))
+                        try? FileManager.default.removeItem(at: staging)
+                        throw InjectError.renameFailed(errMsg)
+                    }
                 }
                 await MainActor.run {
                     results[button.id] = .success
                     progress[button.id] = 1.0
                     working = nil
-                    log("\(button.name) [\(tag)] — apply success")
+                    log("\(button.name) [\(tag)] — apply success (\(resolvedFiles.count) files)")
                 }
             } catch {
                 await MainActor.run {

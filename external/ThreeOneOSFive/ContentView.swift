@@ -140,7 +140,7 @@ struct ContentView: View {
                     )
                 }
             }
-            .navigationTitle("REGSXD EXTERNAL")
+            .navigationTitle("REGS EXTERNAL PRO")
             .navigationSplitViewColumnWidth(min: 210, ideal: 240, max: 300)
         } detail: {
             sectionContent(selectedVisibleSection)
@@ -284,10 +284,19 @@ private struct DashboardView: View {
             .toolbarBackground(.visible, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    VStack(spacing: 0) {
-                        Text("REGSXD EXTERNAL IOS")
-                            .font(.system(size: 14, weight: .black))
-                            .foregroundStyle(.red)
+                    VStack(spacing: 1) {
+                        HStack(spacing: 5) {
+                            Text("REGS EXTERNAL")
+                                .font(.system(size: 13, weight: .black))
+                                .foregroundStyle(.red)
+                            Text("PRO")
+                                .font(.system(size: 9, weight: .black))
+                                .foregroundStyle(.white)
+                                .padding(.horizontal, 4)
+                                .padding(.vertical, 1)
+                                .background(Color.red)
+                                .clipShape(RoundedRectangle(cornerRadius: 3, style: .continuous))
+                        }
                         Text("by </> REGS XD")
                             .font(.system(size: 10, weight: .medium))
                             .foregroundStyle(.red.opacity(0.7))
@@ -332,10 +341,19 @@ private struct DashboardView: View {
                             .foregroundStyle(.red)
                     }
                 }
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("REGSXD EXTERNAL IOS")
-                        .font(.system(size: 15, weight: .bold))
-                        .foregroundStyle(.white)
+                VStack(alignment: .leading, spacing: 3) {
+                    HStack(spacing: 6) {
+                        Text("REGS EXTERNAL")
+                            .font(.system(size: 15, weight: .heavy))
+                            .foregroundStyle(.white)
+                        Text("PRO")
+                            .font(.system(size: 10, weight: .black))
+                            .foregroundStyle(.white)
+                            .padding(.horizontal, 5)
+                            .padding(.vertical, 2)
+                            .background(Color.red)
+                            .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
+                    }
                     Text("</> REGS XD")
                         .font(.system(size: 12, weight: .regular))
                         .foregroundStyle(Color(white: 0.5))

@@ -16,9 +16,18 @@ struct SettingsView: View {
                         HStack(spacing: 14) {
                             AppLogo()
                             VStack(alignment: .leading, spacing: 3) {
-                                Text("REGSXD EXTERNAL")
-                                    .font(.system(size: 15, weight: .bold))
-                                    .foregroundStyle(.white)
+                                HStack(spacing: 6) {
+                                    Text("REGS EXTERNAL")
+                                        .font(.system(size: 15, weight: .heavy))
+                                        .foregroundStyle(.white)
+                                    Text("PRO")
+                                        .font(.system(size: 10, weight: .black))
+                                        .foregroundStyle(.white)
+                                        .padding(.horizontal, 5)
+                                        .padding(.vertical, 2)
+                                        .background(Color.red)
+                                        .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
+                                }
                                 Text(language.text("common.version", appVersion))
                                     .font(.subheadline)
                                     .foregroundStyle(Color(white: 0.45))
