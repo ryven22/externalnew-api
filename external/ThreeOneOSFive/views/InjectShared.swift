@@ -94,68 +94,62 @@ func resolveContainer(bundleID: String) throws -> URL {
 
 // MARK: - Console View (Monochrome Basic)
 
+// MARK: - Console View (Clean Minimalist Monochrome)
+
 struct ConsoleView: View {
     let logs: [String]
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            // console topbar
-            HStack(spacing: 6) {
-                // traffic lights (monochrome)
-                Circle().fill(Color(white: 0.28)).frame(width: 7, height: 7)
-                Circle().fill(Color(white: 0.22)).frame(width: 7, height: 7)
-                Circle().fill(Color(white: 0.16)).frame(width: 7, height: 7)
+            // Console topbar
+            HStack(spacing: 8) {
+                // Minimalist indicator dots
+                Circle().fill(Color(white: 0.40)).frame(width: 5, height: 5)
+                Circle().fill(Color(white: 0.25)).frame(width: 5, height: 5)
+                Circle().fill(Color(white: 0.18)).frame(width: 5, height: 5)
 
-                Rectangle()
-                    .fill(Color(white: 0.14))
-                    .frame(width: 1, height: 12)
-                    .padding(.horizontal, 2)
-
-                Image(systemName: "terminal.fill")
-                    .font(.system(size: 9))
-                    .foregroundStyle(Color.white.opacity(0.7))
-
-                Text("console")
-                    .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                    .foregroundStyle(Color(white: 0.45))
+                Text("TERMINAL")
+                    .font(.system(size: 9, weight: .bold, design: .monospaced))
+                    .foregroundStyle(Color(white: 0.50))
+                    .kerning(1.2)
 
                 Spacer()
 
                 if !logs.isEmpty {
-                    Text("\(logs.count) lines")
-                        .font(.system(size: 9, design: .monospaced))
+                    Text("\(logs.count) EVENTS")
+                        .font(.system(size: 9, weight: .medium, design: .monospaced))
                         .foregroundStyle(Color(white: 0.35))
                 }
             }
             .padding(.horizontal, 14)
-            .padding(.vertical, 9)
+            .padding(.vertical, 8)
             .background(Color(white: 0.05))
             .overlay(
                 Rectangle()
-                    .fill(Color(white: 0.16))
+                    .fill(Color.white.opacity(0.10))
                     .frame(height: 1),
                 alignment: .top
             )
 
-            // log lines
+            // Log lines
             ScrollViewReader { proxy in
                 ScrollView {
-                    VStack(alignment: .leading, spacing: 4) {
+                    VStack(alignment: .leading, spacing: 5) {
                         if logs.isEmpty {
                             HStack(spacing: 6) {
-                                Text(">")
-                                    .foregroundStyle(Color.white.opacity(0.4))
-                                Text("waiting for action...")
-                                    .foregroundStyle(Color(white: 0.30))
+                                Text("$")
+                                    .foregroundStyle(Color.white.opacity(0.40))
+                                Text("ready — select an action")
+                                    .foregroundStyle(Color(white: 0.35))
                             }
                             .font(.system(size: 11, design: .monospaced))
                         } else {
                             ForEach(Array(logs.enumerated()), id: \.offset) { i, line in
                                 HStack(alignment: .top, spacing: 6) {
-                                    Text(">")
-                                        .foregroundStyle(Color.white.opacity(0.5))
+                                    Text("$")
+                                        .foregroundStyle(Color.white.opacity(0.45))
                                     Text(line)
-                                        .foregroundStyle(Color(white: 0.70))
+                                        .foregroundStyle(Color(white: 0.85))
                                 }
                                 .font(.system(size: 11, design: .monospaced))
                                 .id(i)
@@ -172,13 +166,13 @@ struct ConsoleView: View {
                     }
                 }
             }
-            .frame(height: 115)
-            .background(Color(white: 0.03))
+            .frame(height: 110)
+            .background(Color.black)
         }
     }
 }
 
-// MARK: - Inject Button Card (Black & White Basic Style)
+// MARK: - Inject Button Card (Clean Flat Monochrome)
 
 struct InjectButtonCard: View {
     let button: InjectButton
@@ -207,38 +201,43 @@ struct InjectButtonCard: View {
     var body: some View {
         Button(action: onTap) {
             VStack(spacing: 0) {
-                // main row
+                // Main card row
                 HStack(spacing: 12) {
-                    // left icon
+                    // Left icon
                     ZStack {
-                        RoundedRectangle(cornerRadius: 8, style: .continuous)
-                            .fill(iconBg)
-                            .frame(width: 36, height: 36)
+                        RoundedRectangle(cornerRadius: 10, style: .continuous)
+                            .fill(Color(white: 0.09))
+                            .frame(width: 38, height: 38)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                    .stroke(Color.white.opacity(isSuccess ? 0.30 : 0.12), lineWidth: 1)
+                            )
                         Image(systemName: iconName)
-                            .font(.system(size: 14, weight: .semibold))
-                            .foregroundStyle(iconColor)
+                            .font(.system(size: 14, weight: .bold))
+                            .foregroundStyle(isSuccess ? .white : Color(white: 0.85))
                     }
 
-                    // name + category
+                    // Name + Category
                     VStack(alignment: .leading, spacing: 3) {
                         Text(button.name)
-                            .font(.system(size: 14, weight: .bold))
+                            .font(.system(size: 13, weight: .heavy))
                             .foregroundStyle(.white)
+                            .kerning(0.8)
                         Text(button.category)
-                            .font(.system(size: 10, weight: .semibold))
+                            .font(.system(size: 9, weight: .bold, design: .monospaced))
                             .foregroundStyle(Color(white: 0.40))
-                            .kerning(1)
+                            .kerning(1.2)
                     }
 
                     Spacer()
 
-                    // right status
+                    // Right status badge
                     statusBadge
                 }
                 .padding(.horizontal, 14)
-                .padding(.vertical, 13)
+                .padding(.vertical, 12)
 
-                // progress bar
+                // Linear progress bar
                 if isWorking {
                     GeometryReader { geo in
                         ZStack(alignment: .leading) {
@@ -253,15 +252,15 @@ struct InjectButtonCard: View {
                     .frame(height: 2)
                 }
 
-                // error message
+                // Error message banner
                 if let msg = failedMessage {
                     HStack(spacing: 6) {
-                        Image(systemName: "exclamationmark.circle")
+                        Image(systemName: "exclamationmark.circle.fill")
                             .font(.system(size: 10))
-                            .foregroundStyle(Color.white.opacity(0.8))
+                            .foregroundStyle(Color.white.opacity(0.90))
                         Text(msg)
-                            .font(.system(size: 10, design: .monospaced))
-                            .foregroundStyle(Color.white.opacity(0.75))
+                            .font(.system(size: 10, weight: .medium, design: .monospaced))
+                            .foregroundStyle(Color.white.opacity(0.80))
                             .lineLimit(1)
                         Spacer()
                     }
@@ -269,17 +268,22 @@ struct InjectButtonCard: View {
                     .padding(.bottom, 10)
                 }
             }
-            .background(cardBg)
-            .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+            .background(Color(white: 0.06))
+            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
             .overlay(
-                RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    .stroke(borderColor, lineWidth: 1)
+                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    .stroke(
+                        isSuccess
+                            ? Color.white.opacity(0.35)
+                            : (isWorking ? Color.white.opacity(0.40) : Color.white.opacity(0.12)),
+                        lineWidth: 1
+                    )
             )
         }
         .buttonStyle(.plain)
         .disabled(isWorking)
-        .scaleEffect(pressed ? 0.97 : 1.0)
-        .animation(.spring(response: 0.2, dampingFraction: 0.7), value: pressed)
+        .scaleEffect(pressed ? 0.98 : 1.0)
+        .animation(.spring(response: 0.2, dampingFraction: 0.75), value: pressed)
         .simultaneousGesture(
             DragGesture(minimumDistance: 0)
                 .onChanged { _ in pressed = true }
@@ -291,34 +295,8 @@ struct InjectButtonCard: View {
         if isWorking { return "arrow.triangle.2.circlepath" }
         if isSuccess { return "checkmark" }
         if isFailed  { return "xmark" }
+        if button.isDeleteAction { return "trash.fill" }
         return "bolt.fill"
-    }
-
-    private var iconColor: Color {
-        if isSuccess { return .white }
-        if isFailed  { return Color(white: 0.6) }
-        return .white
-    }
-
-    private var iconBg: Color {
-        if isSuccess { return Color(white: 0.18) }
-        if isFailed  { return Color(white: 0.10) }
-        if isWorking { return Color(white: 0.22) }
-        return Color(white: 0.10)
-    }
-
-    private var cardBg: some View {
-        LinearGradient(
-            colors: [Color(white: 0.08), Color(white: 0.05)],
-            startPoint: .topLeading, endPoint: .bottomTrailing
-        )
-    }
-
-    private var borderColor: Color {
-        if isSuccess { return Color.white.opacity(0.40) }
-        if isFailed  { return Color(white: 0.25) }
-        if isWorking { return Color.white.opacity(0.50) }
-        return Color(white: 0.14)
     }
 
     @ViewBuilder
@@ -333,41 +311,61 @@ struct InjectButtonCard: View {
                     .scaleEffect(0.55)
                     .tint(.white)
             }
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
+            .background(Color(white: 0.12))
+            .clipShape(Capsule())
         } else if isSuccess {
             HStack(spacing: 4) {
-                Image(systemName: "checkmark.circle.fill")
-                    .foregroundStyle(.white)
-                    .font(.system(size: 13))
+                Image(systemName: "checkmark")
+                    .font(.system(size: 10, weight: .black))
                 Text("DONE")
-                    .font(.system(size: 10, weight: .bold))
-                    .foregroundStyle(.white)
-                    .kerning(0.5)
+                    .font(.system(size: 10, weight: .heavy))
+                    .kerning(0.8)
             }
+            .foregroundStyle(.black)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 5)
+            .background(Color.white)
+            .clipShape(Capsule())
         } else if isFailed {
             HStack(spacing: 4) {
-                Image(systemName: "xmark.circle.fill")
-                    .foregroundStyle(Color(white: 0.6))
-                    .font(.system(size: 13))
+                Image(systemName: "xmark")
+                    .font(.system(size: 10, weight: .bold))
                 Text("FAIL")
                     .font(.system(size: 10, weight: .bold))
-                    .foregroundStyle(Color(white: 0.6))
-                    .kerning(0.5)
+                    .kerning(0.8)
             }
+            .foregroundStyle(Color(white: 0.65))
+            .padding(.horizontal, 10)
+            .padding(.vertical, 5)
+            .background(Color(white: 0.12))
+            .clipShape(Capsule())
+            .overlay(
+                Capsule().stroke(Color.white.opacity(0.15), lineWidth: 1)
+            )
         } else {
             HStack(spacing: 4) {
                 Image(systemName: "play.fill")
-                    .font(.system(size: 9))
+                    .font(.system(size: 8))
                     .foregroundStyle(.white)
-                Text("TAP")
-                    .font(.system(size: 10, weight: .bold))
-                    .foregroundStyle(Color(white: 0.50))
-                    .kerning(0.5)
+                Text("APPLY")
+                    .font(.system(size: 10, weight: .heavy))
+                    .foregroundStyle(.white)
+                    .kerning(1.0)
             }
+            .padding(.horizontal, 10)
+            .padding(.vertical, 5)
+            .background(Color(white: 0.12))
+            .clipShape(Capsule())
+            .overlay(
+                Capsule().stroke(Color.white.opacity(0.20), lineWidth: 1)
+            )
         }
     }
 }
 
-// MARK: - Open Game Button Card (Monochrome Basic)
+// MARK: - Open Game Button Card (Clean Flat Monochrome)
 
 struct OpenGameButtonCard: View {
     let button: OpenGameButton
@@ -384,9 +382,10 @@ struct OpenGameButtonCard: View {
                     .foregroundStyle(.white)
 
                 Text(button.name)
-                    .font(.system(size: 12, weight: .bold))
+                    .font(.system(size: 11, weight: .heavy))
                     .foregroundStyle(.white)
                     .lineLimit(1)
+                    .kerning(0.5)
 
                 Spacer()
 
@@ -396,27 +395,27 @@ struct OpenGameButtonCard: View {
                         .scaleEffect(0.6)
                         .tint(.white)
                 } else {
-                    Image(systemName: "chevron.right")
-                        .font(.system(size: 9, weight: .semibold))
+                    Image(systemName: "arrow.up.right")
+                        .font(.system(size: 9, weight: .bold))
                         .foregroundStyle(Color(white: 0.45))
                 }
             }
             .padding(.horizontal, 12)
-            .padding(.vertical, 9)
+            .padding(.vertical, 10)
             .background(
-                ZStack {
-                    RoundedRectangle(cornerRadius: 10, style: .continuous)
-                        .fill(isWorking ? Color(white: 0.12) : Color(white: 0.07))
-                    RoundedRectangle(cornerRadius: 10, style: .continuous)
-                        .stroke(isWorking ? Color.white.opacity(0.4) : Color(white: 0.14), lineWidth: 1)
-                }
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    .fill(isWorking ? Color(white: 0.12) : Color(white: 0.06))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    .stroke(Color.white.opacity(isWorking ? 0.35 : 0.12), lineWidth: 1)
             )
         }
         .buttonStyle(.plain)
         .disabled(isWorking)
-        .frame(maxWidth: .infinity, minHeight: 38, maxHeight: 38)
-        .scaleEffect(pressed ? 0.96 : 1.0)
-        .animation(.spring(response: 0.2, dampingFraction: 0.7), value: pressed)
+        .frame(maxWidth: .infinity, minHeight: 40, maxHeight: 40)
+        .scaleEffect(pressed ? 0.97 : 1.0)
+        .animation(.spring(response: 0.2, dampingFraction: 0.75), value: pressed)
         .simultaneousGesture(
             DragGesture(minimumDistance: 0)
                 .onChanged { _ in pressed = true }

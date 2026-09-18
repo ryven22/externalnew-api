@@ -76,12 +76,12 @@ struct ExtraMenuView: View {
                             // MARK: EXTRA patch buttons
                             VStack(alignment: .leading, spacing: 10) {
                                 HStack {
-                                    Text("EXTRA")
-                                        .font(.system(size: 11, weight: .bold))
-                                        .foregroundStyle(.red.opacity(0.8))
+                                    Text("EXTRA FEATURES")
+                                        .font(.system(size: 9, weight: .bold, design: .monospaced))
+                                        .foregroundStyle(Color.white.opacity(0.85))
                                         .kerning(1.5)
                                     Rectangle()
-                                        .fill(Color.red.opacity(0.2))
+                                        .fill(Color.white.opacity(0.12))
                                         .frame(height: 1)
                                 }
                                 .padding(.horizontal, 16)
@@ -104,12 +104,12 @@ struct ExtraMenuView: View {
                             // MARK: OPEN GAME buttons
                             VStack(alignment: .leading, spacing: 10) {
                                 HStack {
-                                    Text("OPEN GAME")
-                                        .font(.system(size: 11, weight: .bold))
-                                        .foregroundStyle(.red.opacity(0.8))
+                                    Text("LAUNCH GAME")
+                                        .font(.system(size: 9, weight: .bold, design: .monospaced))
+                                        .foregroundStyle(Color.white.opacity(0.85))
                                         .kerning(1.5)
                                     Rectangle()
-                                        .fill(Color.red.opacity(0.2))
+                                        .fill(Color.white.opacity(0.12))
                                         .frame(height: 1)
                                 }
                                 .padding(.horizontal, 16)
@@ -155,48 +155,49 @@ struct ExtraMenuView: View {
     // MARK: - Target Selector View
 
     private var targetSelector: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(spacing: 8) {
             HStack {
-                Text("TARGET")
-                    .font(.system(size: 11, weight: .bold))
-                    .foregroundStyle(Color(white: 0.4))
+                Text("TARGET APPLICATION")
+                    .font(.system(size: 9, weight: .bold, design: .monospaced))
+                    .foregroundStyle(Color(white: 0.45))
                     .kerning(1.5)
-                Rectangle()
-                    .fill(Color(white: 0.12))
-                    .frame(height: 1)
+                Spacer()
             }
             .padding(.horizontal, 16)
 
             HStack(spacing: 8) {
                 ForEach(TargetGame.allCases) { target in
                     Button {
-                        withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) {
+                        withAnimation(.spring(response: 0.25, dampingFraction: 0.8)) {
                             selectedTarget = target
                         }
                     } label: {
-                        HStack(spacing: 6) {
+                        HStack(spacing: 8) {
                             Circle()
-                                .fill(selectedTarget == target ? target.accentColor : Color(white: 0.25))
+                                .fill(selectedTarget == target ? Color.white : Color(white: 0.25))
                                 .frame(width: 6, height: 6)
-                            Text(target.displayName)
-                                .font(.system(size: 13, weight: .semibold))
-                                .foregroundStyle(selectedTarget == target ? .white : Color(white: 0.45))
-                                .lineLimit(1)
+
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(target.shortTag)
+                                    .font(.system(size: 9, weight: .bold, design: .monospaced))
+                                    .foregroundStyle(selectedTarget == target ? Color.white : Color(white: 0.40))
+                                    .kerning(1)
+                                Text(target.displayName)
+                                    .font(.system(size: 12, weight: .heavy))
+                                    .foregroundStyle(selectedTarget == target ? .white : Color(white: 0.45))
+                                    .lineLimit(1)
+                            }
+                            Spacer()
                         }
-                        .frame(maxWidth: .infinity)
+                        .padding(.horizontal, 14)
                         .padding(.vertical, 10)
                         .background(
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                    .fill(selectedTarget == target
-                                          ? target.accentColor.opacity(0.12)
-                                          : Color(white: 0.07))
-                                RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                    .stroke(selectedTarget == target
-                                            ? target.accentColor.opacity(0.5)
-                                            : Color(white: 0.12),
-                                            lineWidth: 1)
-                            }
+                            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                .fill(selectedTarget == target ? Color(white: 0.12) : Color(white: 0.05))
+                        )
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                .stroke(selectedTarget == target ? Color.white.opacity(0.35) : Color.white.opacity(0.08), lineWidth: 1)
                         )
                     }
                     .buttonStyle(.plain)
@@ -204,16 +205,16 @@ struct ExtraMenuView: View {
             }
             .padding(.horizontal, 16)
 
-            HStack(spacing: 6) {
-                Image(systemName: "bolt")
-                    .font(.system(size: 10))
-                    .foregroundStyle(selectedTarget.accentColor)
+            HStack(spacing: 5) {
+                Image(systemName: "checkmark.shield")
+                    .font(.system(size: 9))
+                    .foregroundStyle(Color(white: 0.40))
                 Text(selectedTarget.rawValue)
-                    .font(.system(size: 10, weight: .medium, design: .monospaced))
-                    .foregroundStyle(Color(white: 0.4))
+                    .font(.system(size: 9, weight: .medium, design: .monospaced))
+                    .foregroundStyle(Color(white: 0.35))
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, 16)
-            .padding(.bottom, 2)
         }
     }
 

@@ -180,55 +180,51 @@ struct InjectMenuView: View {
     // MARK: - Target Selector
 
     private var targetSelector: some View {
-        VStack(spacing: 10) {
-            // section label
+        VStack(spacing: 8) {
+            // Section label
             HStack {
-                Rectangle()
-                    .fill(Color.white.opacity(0.6))
-                    .frame(width: 3, height: 12)
-                    .clipShape(Capsule())
-                Text("TARGET")
-                    .font(.system(size: 10, weight: .black))
+                Text("TARGET APPLICATION")
+                    .font(.system(size: 9, weight: .bold, design: .monospaced))
                     .foregroundStyle(Color(white: 0.45))
-                    .kerning(2)
+                    .kerning(1.5)
                 Spacer()
             }
             .padding(.horizontal, 16)
 
-            // selector pills
+            // Selector pills
             HStack(spacing: 8) {
                 ForEach(TargetGame.allCases) { target in
                     Button {
-                        withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) {
+                        withAnimation(.spring(response: 0.25, dampingFraction: 0.8)) {
                             selectedTarget = target
                         }
                     } label: {
-                        VStack(spacing: 4) {
-                            Text(target.shortTag)
-                                .font(.system(size: 11, weight: .black))
-                                .foregroundStyle(selectedTarget == target ? target.accentColor : Color(white: 0.3))
-                                .kerning(1)
-                            Text(target.displayName)
-                                .font(.system(size: 13, weight: .semibold))
-                                .foregroundStyle(selectedTarget == target ? .white : Color(white: 0.4))
-                                .lineLimit(1)
-                        }
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 12)
-                        .background(
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 12, style: .continuous)
-                                    .fill(selectedTarget == target
-                                          ? target.accentColor.opacity(0.10)
-                                          : Color(white: 0.06))
-                                if selectedTarget == target {
-                                    RoundedRectangle(cornerRadius: 12, style: .continuous)
-                                        .stroke(target.accentColor.opacity(0.55), lineWidth: 1)
-                                } else {
-                                    RoundedRectangle(cornerRadius: 12, style: .continuous)
-                                        .stroke(Color(white: 0.10), lineWidth: 1)
-                                }
+                        HStack(spacing: 8) {
+                            Circle()
+                                .fill(selectedTarget == target ? Color.white : Color(white: 0.25))
+                                .frame(width: 6, height: 6)
+
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(target.shortTag)
+                                    .font(.system(size: 9, weight: .bold, design: .monospaced))
+                                    .foregroundStyle(selectedTarget == target ? Color.white : Color(white: 0.40))
+                                    .kerning(1)
+                                Text(target.displayName)
+                                    .font(.system(size: 12, weight: .heavy))
+                                    .foregroundStyle(selectedTarget == target ? .white : Color(white: 0.45))
+                                    .lineLimit(1)
                             }
+                            Spacer()
+                        }
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 10)
+                        .background(
+                            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                .fill(selectedTarget == target ? Color(white: 0.12) : Color(white: 0.05))
+                        )
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                .stroke(selectedTarget == target ? Color.white.opacity(0.35) : Color.white.opacity(0.08), lineWidth: 1)
                         )
                     }
                     .buttonStyle(.plain)
@@ -236,15 +232,16 @@ struct InjectMenuView: View {
             }
             .padding(.horizontal, 16)
 
-            // bundle id badge
+            // Bundle ID badge
             HStack(spacing: 5) {
-                Image(systemName: "app.badge")
+                Image(systemName: "checkmark.shield")
                     .font(.system(size: 9))
-                    .foregroundStyle(selectedTarget.accentColor.opacity(0.7))
+                    .foregroundStyle(Color(white: 0.40))
                 Text(selectedTarget.rawValue)
                     .font(.system(size: 9, weight: .medium, design: .monospaced))
-                    .foregroundStyle(Color(white: 0.3))
+                    .foregroundStyle(Color(white: 0.35))
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, 16)
         }
     }

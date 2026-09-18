@@ -70,45 +70,47 @@ struct ContentView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .padding(.bottom, 70)
 
-            // Custom tab bar
+            // Custom tab bar (Clean Minimalist Flat Monochrome)
             HStack(spacing: 0) {
                 ForEach(featureVisibility.visibleSections) { section in
                     let isSelected = tabNavigation.selectedTab == section.rawValue
                     Button {
-                        tabNavigation.select(section.rawValue)
+                        withAnimation(.spring(response: 0.25, dampingFraction: 0.8)) {
+                            tabNavigation.select(section.rawValue)
+                        }
                     } label: {
-                        VStack(spacing: 4) {
+                        VStack(spacing: 3) {
                             Image(systemName: section.systemImage)
-                                .font(.system(size: 20, weight: isSelected ? .bold : .regular))
-                                .foregroundStyle(isSelected ? Color.white : Color(white: 0.45))
-                                .scaleEffect(isSelected ? 1.08 : 1.0)
-                                .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isSelected)
+                                .font(.system(size: 17, weight: isSelected ? .black : .medium))
+                                .foregroundStyle(isSelected ? Color.white : Color(white: 0.35))
+                                .frame(height: 22)
+
                             Text(language.text(section.titleKey))
-                                .font(.system(size: 10, weight: isSelected ? .semibold : .regular))
-                                .foregroundStyle(isSelected ? Color.white : Color(white: 0.45))
+                                .font(.system(size: 9, weight: isSelected ? .heavy : .medium))
+                                .foregroundStyle(isSelected ? Color.white : Color(white: 0.35))
+                                .kerning(0.5)
                         }
                         .frame(maxWidth: .infinity)
-                        .padding(.vertical, 10)
+                        .padding(.vertical, 8)
                         .background(
                             isSelected
-                                ? Color.white.opacity(0.12)
+                                ? Color.white.opacity(0.10)
                                 : Color.clear
                         )
-                        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
                         .padding(.horizontal, 4)
                     }
                     .buttonStyle(.plain)
                 }
             }
-            .padding(.horizontal, 12)
-            .padding(.bottom, 20)
+            .padding(.horizontal, 10)
+            .padding(.bottom, 18)
             .padding(.top, 6)
-            .background(.ultraThinMaterial)
-            .background(Color.black.opacity(0.92))
+            .background(Color.black.opacity(0.96))
             .overlay(
                 Rectangle()
-                    .frame(height: 0.5)
-                    .foregroundStyle(Color(white: 0.16)),
+                    .frame(height: 1)
+                    .foregroundStyle(Color.white.opacity(0.10)),
                 alignment: .top
             )
         }
@@ -328,8 +330,8 @@ private struct DashboardView: View {
             HStack(spacing: 14) {
                 ZStack {
                     RoundedRectangle(cornerRadius: 12, style: .continuous)
-                        .fill(Color(white: 0.1))
-                        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(Color.white.opacity(0.2), lineWidth: 1))
+                        .fill(Color(white: 0.08))
+                        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(Color.white.opacity(0.15), lineWidth: 1))
                         .frame(width: 48, height: 48)
                     if let icon = UIImage(named: "ModToolsLogo") ?? UIImage(named: "AppIcon60x60") ?? UIImage(named: "AppIcon") {
                         Image(uiImage: icon)
@@ -338,8 +340,8 @@ private struct DashboardView: View {
                             .frame(width: 48, height: 48)
                             .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                     } else {
-                        Text("MT")
-                            .font(.system(size: 18, weight: .black))
+                        Image(systemName: "shield.lefthalf.filled")
+                            .font(.system(size: 22, weight: .semibold))
                             .foregroundStyle(.white)
                     }
                 }
@@ -348,8 +350,9 @@ private struct DashboardView: View {
                         Text("MOD TOOLS")
                             .font(.system(size: 15, weight: .heavy))
                             .foregroundStyle(.white)
+                            .kerning(1.0)
                         Text("PRO")
-                            .font(.system(size: 10, weight: .black))
+                            .font(.system(size: 9, weight: .black))
                             .foregroundStyle(.black)
                             .padding(.horizontal, 5)
                             .padding(.vertical, 2)
@@ -357,15 +360,15 @@ private struct DashboardView: View {
                             .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
                     }
                     Text("SECURITY UTILITY ENGINE")
-                        .font(.system(size: 11, weight: .semibold))
-                        .foregroundStyle(Color(white: 0.5))
+                        .font(.system(size: 10, weight: .semibold, design: .monospaced))
+                        .foregroundStyle(Color(white: 0.45))
                     Text("v\(AppInfo.appVersion)")
-                        .font(.system(size: 11))
-                        .foregroundStyle(Color(white: 0.35))
+                        .font(.system(size: 10, design: .monospaced))
+                        .foregroundStyle(Color(white: 0.32))
                 }
                 Spacer()
             }
-            .listRowBackground(Color(white: 0.07))
+            .listRowBackground(Color(white: 0.05))
         }
     }
 
@@ -396,7 +399,7 @@ private struct DashboardView: View {
                     }
                     .buttonStyle(.plain)
                 }
-                .listRowBackground(Color(white: 0.07))
+                .listRowBackground(Color(white: 0.05))
 
                 HStack {
                     Image(systemName: "clock.fill")
@@ -413,7 +416,7 @@ private struct DashboardView: View {
                             .foregroundStyle(state.daysRemaining <= 1 ? Color(white: 0.5) : Color.white)
                     }
                 }
-                .listRowBackground(Color(white: 0.07))
+                .listRowBackground(Color(white: 0.05))
 
                 Button(role: .destructive) {
                     showLogoutConfirm = true
@@ -421,11 +424,13 @@ private struct DashboardView: View {
                     Label("Logout / Change Key", systemImage: "rectangle.portrait.and.arrow.right")
                         .foregroundStyle(Color(white: 0.75))
                 }
-                .listRowBackground(Color(white: 0.07))
+                .listRowBackground(Color(white: 0.05))
             }
         } header: {
             Text("LICENSE")
-                .foregroundStyle(Color(white: 0.6))
+                .font(.system(size: 10, weight: .bold, design: .monospaced))
+                .foregroundStyle(Color(white: 0.50))
+                .kerning(1.5)
         }
     }
 
@@ -435,19 +440,20 @@ private struct DashboardView: View {
                 Text(AppInfo.displayMachineName)
                     .font(.body.monospaced())
             }
-            .listRowBackground(Color(white: 0.07))
+            .listRowBackground(Color(white: 0.05))
             LabeledContent("iOS Version") {
                 Text("\(AppInfo.osVersion) (\(AppInfo.osBuild))")
                     .font(.body.monospaced())
             }
-            .listRowBackground(Color(white: 0.07))
+            .listRowBackground(Color(white: 0.05))
             HStack {
                 Text("Compatibility")
                 Spacer()
                 Text(appState.isSupported ? "Supported" : "Unsupported")
-                    .foregroundStyle(appState.isSupported ? Color.white : Color(white: 0.5))
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(appState.isSupported ? Color.white : Color(white: 0.45))
             }
-            .listRowBackground(Color(white: 0.07))
+            .listRowBackground(Color(white: 0.05))
 
             if appState.kernelExploitApplicable && AppInfo.versionTuple.major < 26 {
                 HStack {
@@ -465,14 +471,17 @@ private struct DashboardView: View {
                             .foregroundStyle(appState.exploitStatus.isSuccess ? Color.white : Color.secondary)
                     }
                 }
-                .listRowBackground(Color(white: 0.07))
+                .listRowBackground(Color(white: 0.05))
             }
         } header: {
             Text("DEVICE")
-                .foregroundStyle(Color(white: 0.6))
+                .font(.system(size: 10, weight: .bold, design: .monospaced))
+                .foregroundStyle(Color(white: 0.50))
+                .kerning(1.5)
         } footer: {
             Text("Support iOS 15 – 27")
-                .foregroundStyle(Color(white: 0.4))
+                .font(.system(size: 10, design: .monospaced))
+                .foregroundStyle(Color(white: 0.35))
         }
     }
 }

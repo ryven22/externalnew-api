@@ -32,41 +32,19 @@ struct KeyEntryView: View {
             // Pure pitch black background
             Color.black.ignoresSafeArea()
 
-            // Subtle monochrome top glow
-            VStack {
-                RadialGradient(
-                    colors: [Color(white: 0.12), Color.clear],
-                    center: .center,
-                    startRadius: 0,
-                    endRadius: 260
-                )
-                .frame(height: 260)
-                .offset(y: -60)
-                Spacer()
-            }
-            .ignoresSafeArea()
-
             VStack(spacing: 0) {
                 Spacer()
 
                 // ── HEADER BLOCK ──
-                VStack(spacing: 0) {
-
-                    // Top accent bar
-                    Rectangle()
-                        .fill(Color.white.opacity(0.8))
-                        .frame(width: 42, height: 2)
-                        .clipShape(Capsule())
-                        .padding(.bottom, 24)
-
-                    // App Icon / Logo
+                VStack(spacing: 16) {
+                    // Minimalist App Icon Container
                     ZStack {
-                        RoundedRectangle(cornerRadius: 24, style: .continuous)
+                        RoundedRectangle(cornerRadius: 20, style: .continuous)
                             .fill(Color(white: 0.08))
-                            .frame(width: 100, height: 100)
+                            .frame(width: 88, height: 88)
                             .overlay(
-                                RoundedRectangle(cornerRadius: 24, style: .continuous)
-                                    .stroke(Color.white.opacity(0.22), lineWidth: 1)
+                                RoundedRectangle(cornerRadius: 20, style: .continuous)
+                                    .stroke(Color.white.opacity(0.16), lineWidth: 1)
                             )
 
                         if let icon = UIImage(named: "ModToolsLogo")
@@ -75,60 +53,42 @@ struct KeyEntryView: View {
                             Image(uiImage: icon)
                                 .resizable()
                                 .scaledToFill()
-                                .frame(width: 100, height: 100)
-                                .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
+                                .frame(width: 88, height: 88)
+                                .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
                         } else {
-                            Text("MT")
-                                .font(.system(size: 38, weight: .black))
+                            Image(systemName: "shield.lefthalf.filled")
+                                .font(.system(size: 36, weight: .semibold))
                                 .foregroundStyle(.white)
                         }
                     }
-                    .padding(.bottom, 20)
 
-                    // Brand Title
-                    HStack(spacing: 8) {
-                        Text("MOD TOOLS")
-                            .font(.system(size: 24, weight: .black))
-                            .foregroundStyle(.white)
-                            .kerning(2.0)
-                        Text("PRO")
-                            .font(.system(size: 11, weight: .black))
-                            .foregroundStyle(.black)
-                            .padding(.horizontal, 6)
-                            .padding(.vertical, 3)
-                            .background(Color.white)
-                            .clipShape(RoundedRectangle(cornerRadius: 5, style: .continuous))
+                    // Brand Title & Tag
+                    VStack(spacing: 6) {
+                        HStack(spacing: 8) {
+                            Text("MOD TOOLS")
+                                .font(.system(size: 22, weight: .black, design: .default))
+                                .foregroundStyle(.white)
+                                .kerning(2.5)
+
+                            Text("PRO")
+                                .font(.system(size: 10, weight: .heavy))
+                                .foregroundStyle(.black)
+                                .padding(.horizontal, 6)
+                                .padding(.vertical, 2.5)
+                                .background(Color.white)
+                                .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
+                        }
+
+                        Text("Enter your license key to access tools")
+                            .font(.system(size: 12, weight: .regular))
+                            .foregroundStyle(Color(white: 0.50))
                     }
-
-                    // Divider
-                    HStack(spacing: 10) {
-                        Rectangle()
-                            .fill(Color(white: 0.18))
-                            .frame(height: 1)
-                        Text("SECURITY ENGINE")
-                            .font(.system(size: 9, weight: .bold))
-                            .foregroundStyle(Color(white: 0.45))
-                            .kerning(2.5)
-                            .fixedSize()
-                        Rectangle()
-                            .fill(Color(white: 0.18))
-                            .frame(height: 1)
-                    }
-                    .padding(.horizontal, 40)
-                    .padding(.top, 14)
-                    .padding(.bottom, 6)
-
-                    Text("Enter your license key to continue")
-                        .font(.system(size: 13, weight: .medium))
-                        .foregroundStyle(Color(white: 0.45))
-                        .padding(.top, 6)
                 }
 
                 Spacer().frame(height: 36)
 
                 // ── INPUT BLOCK ──
                 VStack(spacing: 14) {
-
                     // Key field
                     ZStack(alignment: .trailing) {
                         Group {
@@ -149,10 +109,10 @@ struct KeyEntryView: View {
                         .padding(.horizontal, 48)
                         .background(
                             RoundedRectangle(cornerRadius: 14, style: .continuous)
-                                .fill(Color(white: 0.08))
+                                .fill(Color(white: 0.06))
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 14, style: .continuous)
-                                        .stroke(Color(white: 0.24), lineWidth: 1)
+                                        .stroke(Color.white.opacity(keyInput.isEmpty ? 0.12 : 0.28), lineWidth: 1)
                                 )
                         )
                         .offset(x: shaking ? -8 : 0)
@@ -169,28 +129,27 @@ struct KeyEntryView: View {
                         } label: {
                             Image(systemName: keyVisible ? "eye.slash.fill" : "eye.fill")
                                 .font(.system(size: 14))
-                                .foregroundStyle(Color(white: 0.5))
+                                .foregroundStyle(Color(white: 0.45))
                         }
-                        .padding(.trailing, 14)
+                        .padding(.trailing, 16)
                     }
 
                     // Error message
                     if let error = license.lastError {
                         HStack(spacing: 6) {
-                            Rectangle()
-                                .fill(Color.white)
-                                .frame(width: 3, height: 14)
-                                .clipShape(Capsule())
+                            Image(systemName: "exclamationmark.circle.fill")
+                                .font(.system(size: 11))
+                                .foregroundStyle(.white)
                             Text(error)
-                                .font(.caption)
-                                .foregroundStyle(Color.white.opacity(0.9))
+                                .font(.system(size: 11, weight: .medium))
+                                .foregroundStyle(Color.white.opacity(0.85))
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.leading, 4)
+                        .padding(.horizontal, 4)
                         .transition(.opacity.combined(with: .move(edge: .top)))
                     }
 
-                    // Activate button (High-contrast full white / basic style)
+                    // Activate button (High-contrast clean white flat button)
                     Button(action: submitKey) {
                         ZStack {
                             if license.isChecking {
@@ -198,28 +157,29 @@ struct KeyEntryView: View {
                                     ProgressView()
                                         .tint(.black)
                                         .scaleEffect(0.85)
-                                    Text("Checking...")
-                                        .font(.system(size: 15, weight: .bold))
+                                    Text("VERIFYING...")
+                                        .font(.system(size: 14, weight: .heavy))
                                         .foregroundStyle(Color.black.opacity(0.8))
+                                        .kerning(1.5)
                                 }
                             } else {
                                 Text("ACTIVATE")
-                                    .font(.system(size: 15, weight: .black))
+                                    .font(.system(size: 14, weight: .heavy))
                                     .foregroundStyle(keyInput.isEmpty ? Color(white: 0.40) : Color.black)
                                     .kerning(2.0)
                             }
                         }
                         .frame(maxWidth: .infinity)
-                        .frame(height: 54)
+                        .frame(height: 50)
                         .background(
                             keyInput.isEmpty || license.isChecking
-                                ? Color(white: 0.16)
+                                ? Color(white: 0.12)
                                 : Color.white
                         )
                         .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
                         .overlay(
                             RoundedRectangle(cornerRadius: 14, style: .continuous)
-                                .stroke(Color(white: 0.25), lineWidth: keyInput.isEmpty ? 1 : 0)
+                                .stroke(Color.white.opacity(keyInput.isEmpty ? 0.10 : 0.0), lineWidth: 1)
                         )
                     }
                     .disabled(keyInput.isEmpty || license.isChecking)
@@ -231,20 +191,8 @@ struct KeyEntryView: View {
 
                 // ── FOOTER BUTTONS ──
                 VStack(spacing: 12) {
-                    // Thin separator
-                    HStack(spacing: 8) {
-                        Rectangle().fill(Color(white: 0.14)).frame(height: 1)
-                        Text("CONTACT")
-                            .font(.system(size: 9, weight: .bold))
-                            .foregroundStyle(Color(white: 0.35))
-                            .kerning(2)
-                            .fixedSize()
-                        Rectangle().fill(Color(white: 0.14)).frame(height: 1)
-                    }
-                    .padding(.horizontal, 28)
-
                     HStack(spacing: 10) {
-                        // Buy Key (Monochrome)
+                        // Buy Key (Minimalist)
                         Button {
                             if let url = URL(string: "https://wa.me/6283899369257") {
                                 UIApplication.shared.open(url)
@@ -252,53 +200,53 @@ struct KeyEntryView: View {
                         } label: {
                             HStack(spacing: 6) {
                                 Image(systemName: "cart.fill")
-                                    .font(.system(size: 11, weight: .bold))
+                                    .font(.system(size: 10, weight: .semibold))
                                 Text("BUY KEY")
-                                    .font(.system(size: 12, weight: .bold))
+                                    .font(.system(size: 11, weight: .bold))
                                     .kerning(1.0)
                             }
                             .frame(maxWidth: .infinity)
-                            .frame(height: 44)
+                            .frame(height: 42)
                             .foregroundStyle(.white)
-                            .background(Color(white: 0.10))
+                            .background(Color(white: 0.08))
                             .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                             .overlay(
                                 RoundedRectangle(cornerRadius: 12, style: .continuous)
-                                    .stroke(Color(white: 0.26), lineWidth: 1)
+                                    .stroke(Color.white.opacity(0.12), lineWidth: 1)
                             )
                         }
 
-                        // Channel (Monochrome)
+                        // Channel (Minimalist)
                         Button {
                             if let url = URL(string: "https://whatsapp.com/channel/0029Vb800WiJkK74Ssu8Fx0i") {
                                 UIApplication.shared.open(url)
                             }
                         } label: {
                             HStack(spacing: 6) {
-                                Image(systemName: "bubble.left.and.bubble.right.fill")
-                                    .font(.system(size: 11, weight: .bold))
+                                Image(systemName: "paperplane.fill")
+                                    .font(.system(size: 10, weight: .semibold))
                                 Text("CHANNEL")
-                                    .font(.system(size: 12, weight: .bold))
+                                    .font(.system(size: 11, weight: .bold))
                                     .kerning(1.0)
                             }
                             .frame(maxWidth: .infinity)
-                            .frame(height: 44)
+                            .frame(height: 42)
                             .foregroundStyle(.white)
-                            .background(Color(white: 0.10))
+                            .background(Color(white: 0.08))
                             .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                             .overlay(
                                 RoundedRectangle(cornerRadius: 12, style: .continuous)
-                                    .stroke(Color(white: 0.26), lineWidth: 1)
+                                    .stroke(Color.white.opacity(0.12), lineWidth: 1)
                             )
                         }
                     }
                     .padding(.horizontal, 28)
 
-                    Text("Key is bound to this device on first activation")
-                        .font(.system(size: 10))
-                        .foregroundStyle(Color(white: 0.28))
-                        .padding(.bottom, 28)
-                        .padding(.top, 4)
+                    Text("Device locked after first key activation")
+                        .font(.system(size: 10, weight: .regular))
+                        .foregroundStyle(Color(white: 0.32))
+                        .padding(.bottom, 24)
+                        .padding(.top, 2)
                 }
             }
         }
