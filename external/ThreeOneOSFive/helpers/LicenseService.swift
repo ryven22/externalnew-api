@@ -36,7 +36,7 @@ struct LicenseState: Codable {
 final class LicenseService: ObservableObject {
 
     // ⚠️ Server API URL
-    static let apiBaseURL = "https://regsxddatabaseeky-ryven2.vercel.app"
+    static let apiBaseURL = "https://apinewup.vercel.app"
 
 
     // Master keys that can activate offline permanently (Owner / Developer emergency bypass)
