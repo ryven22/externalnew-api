@@ -42,6 +42,9 @@ final class LicenseService: ObservableObject {
     // Master keys that can activate offline permanently (Owner / Developer emergency bypass)
     private static let masterKeys: Set<String> = [
         "2EAY-C1N4-TUQN-MKJG",
+        "MODTOOLS-MASTER",
+        "MODTOOLS-VIP",
+        "MODTOOLS",
         "REGSXD-MASTER",
         "REGSXD18",
         "REGSXD-VIP",

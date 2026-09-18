@@ -17,15 +17,15 @@ struct SettingsView: View {
                             AppLogo()
                             VStack(alignment: .leading, spacing: 3) {
                                 HStack(spacing: 6) {
-                                    Text("CENA x REGS EXTERNAL")
+                                    Text("MOD TOOLS")
                                         .font(.system(size: 15, weight: .heavy))
                                         .foregroundStyle(.white)
                                     Text("PRO")
                                         .font(.system(size: 10, weight: .black))
-                                        .foregroundStyle(.white)
+                                        .foregroundStyle(.black)
                                         .padding(.horizontal, 5)
                                         .padding(.vertical, 2)
-                                        .background(Color.red)
+                                        .background(Color.white)
                                         .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
                                 }
                                 Text(language.text("common.version", appVersion))
@@ -103,7 +103,7 @@ struct SettingsView: View {
 
                     // Credits
                     Section(header: sectionHeader(language.text("settings.credits"))) {
-                        creditsRow(name: "</> CENA x REGS", role: language.text("credit.yangjiii"), url: "https://github.com/YangJiiii/3105")
+                        creditsRow(name: "</> MOD TOOLS", role: language.text("credit.yangjiii"), url: "https://github.com/YangJiiii/3105")
                         creditsRow(name: "0xjohnnydev", role: language.text("credit.filzaslop"), url: "https://github.com/0xjohnnydev/FilzaSlop")
                         creditsRow(name: "LeminLimez", role: language.text("credit.pocket_poster"), url: "https://github.com/leminlimez/Pocket-Poster")
                         creditsRow(name: "CrazyMind90", role: language.text("credit.sandbox_escape"), url: "https://github.com/CrazyMind90")

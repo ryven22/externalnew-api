@@ -92,7 +92,7 @@ func resolveContainer(bundleID: String) throws -> URL {
     return URL(fileURLWithPath: path, isDirectory: true)
 }
 
-// MARK: - Console View
+// MARK: - Console View (Monochrome Basic)
 
 struct ConsoleView: View {
     let logs: [String]
@@ -101,30 +101,30 @@ struct ConsoleView: View {
         VStack(alignment: .leading, spacing: 0) {
             // console topbar
             HStack(spacing: 6) {
-                // traffic lights
+                // traffic lights (monochrome)
+                Circle().fill(Color(white: 0.28)).frame(width: 7, height: 7)
                 Circle().fill(Color(white: 0.22)).frame(width: 7, height: 7)
-                Circle().fill(Color(white: 0.22)).frame(width: 7, height: 7)
-                Circle().fill(Color.red.opacity(0.6)).frame(width: 7, height: 7)
+                Circle().fill(Color(white: 0.16)).frame(width: 7, height: 7)
 
                 Rectangle()
-                    .fill(Color(white: 0.1))
+                    .fill(Color(white: 0.14))
                     .frame(width: 1, height: 12)
                     .padding(.horizontal, 2)
 
                 Image(systemName: "terminal.fill")
                     .font(.system(size: 9))
-                    .foregroundStyle(Color.red.opacity(0.6))
+                    .foregroundStyle(Color.white.opacity(0.7))
 
                 Text("console")
                     .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                    .foregroundStyle(Color(white: 0.35))
+                    .foregroundStyle(Color(white: 0.45))
 
                 Spacer()
 
                 if !logs.isEmpty {
                     Text("\(logs.count) lines")
                         .font(.system(size: 9, design: .monospaced))
-                        .foregroundStyle(Color(white: 0.25))
+                        .foregroundStyle(Color(white: 0.35))
                 }
             }
             .padding(.horizontal, 14)
@@ -132,7 +132,7 @@ struct ConsoleView: View {
             .background(Color(white: 0.05))
             .overlay(
                 Rectangle()
-                    .fill(Color.red.opacity(0.35))
+                    .fill(Color(white: 0.16))
                     .frame(height: 1),
                 alignment: .top
             )
@@ -144,18 +144,18 @@ struct ConsoleView: View {
                         if logs.isEmpty {
                             HStack(spacing: 6) {
                                 Text(">")
-                                    .foregroundStyle(Color.red.opacity(0.4))
+                                    .foregroundStyle(Color.white.opacity(0.4))
                                 Text("waiting for action...")
-                                    .foregroundStyle(Color(white: 0.25))
+                                    .foregroundStyle(Color(white: 0.30))
                             }
                             .font(.system(size: 11, design: .monospaced))
                         } else {
                             ForEach(Array(logs.enumerated()), id: \.offset) { i, line in
                                 HStack(alignment: .top, spacing: 6) {
                                     Text(">")
-                                        .foregroundStyle(Color.red.opacity(0.4))
+                                        .foregroundStyle(Color.white.opacity(0.5))
                                     Text(line)
-                                        .foregroundStyle(Color(white: 0.55))
+                                        .foregroundStyle(Color(white: 0.70))
                                 }
                                 .font(.system(size: 11, design: .monospaced))
                                 .id(i)
@@ -178,7 +178,7 @@ struct ConsoleView: View {
     }
 }
 
-// MARK: - Inject Button Card
+// MARK: - Inject Button Card (Black & White Basic Style)
 
 struct InjectButtonCard: View {
     let button: InjectButton
@@ -226,7 +226,7 @@ struct InjectButtonCard: View {
                             .foregroundStyle(.white)
                         Text(button.category)
                             .font(.system(size: 10, weight: .semibold))
-                            .foregroundStyle(Color(white: 0.35))
+                            .foregroundStyle(Color(white: 0.40))
                             .kerning(1)
                     }
 
@@ -243,15 +243,9 @@ struct InjectButtonCard: View {
                     GeometryReader { geo in
                         ZStack(alignment: .leading) {
                             Rectangle()
-                                .fill(Color(white: 0.07))
+                                .fill(Color(white: 0.12))
                             Rectangle()
-                                .fill(
-                                    LinearGradient(
-                                        colors: [Color.red.opacity(0.5), Color.red],
-                                        startPoint: .leading,
-                                        endPoint: .trailing
-                                    )
-                                )
+                                .fill(Color.white)
                                 .frame(width: geo.size.width * progress)
                                 .animation(.linear(duration: 0.05), value: progress)
                         }
@@ -264,10 +258,10 @@ struct InjectButtonCard: View {
                     HStack(spacing: 6) {
                         Image(systemName: "exclamationmark.circle")
                             .font(.system(size: 10))
-                            .foregroundStyle(.red)
+                            .foregroundStyle(Color.white.opacity(0.8))
                         Text(msg)
                             .font(.system(size: 10, design: .monospaced))
-                            .foregroundStyle(Color.red.opacity(0.75))
+                            .foregroundStyle(Color.white.opacity(0.75))
                             .lineLimit(1)
                         Spacer()
                     }
@@ -280,10 +274,6 @@ struct InjectButtonCard: View {
             .overlay(
                 RoundedRectangle(cornerRadius: 14, style: .continuous)
                     .stroke(borderColor, lineWidth: 1)
-            )
-            .shadow(
-                color: isWorking ? Color.red.opacity(0.12) : Color.clear,
-                radius: 10, x: 0, y: 4
             )
         }
         .buttonStyle(.plain)
@@ -305,44 +295,30 @@ struct InjectButtonCard: View {
     }
 
     private var iconColor: Color {
-        if isSuccess { return .green }
-        if isFailed  { return .red }
-        return .red
+        if isSuccess { return .white }
+        if isFailed  { return Color(white: 0.6) }
+        return .white
     }
 
     private var iconBg: Color {
-        if isSuccess { return Color.green.opacity(0.12) }
-        if isFailed  { return Color.red.opacity(0.15) }
-        if isWorking { return Color.red.opacity(0.12) }
-        return Color(white: 0.08)
+        if isSuccess { return Color(white: 0.18) }
+        if isFailed  { return Color(white: 0.10) }
+        if isWorking { return Color(white: 0.22) }
+        return Color(white: 0.10)
     }
 
     private var cardBg: some View {
-        Group {
-            if isSuccess {
-                LinearGradient(
-                    colors: [Color(white: 0.07), Color.green.opacity(0.06)],
-                    startPoint: .topLeading, endPoint: .bottomTrailing
-                )
-            } else if isWorking {
-                LinearGradient(
-                    colors: [Color(white: 0.08), Color.red.opacity(0.05)],
-                    startPoint: .topLeading, endPoint: .bottomTrailing
-                )
-            } else {
-                LinearGradient(
-                    colors: [Color(white: 0.08), Color(white: 0.05)],
-                    startPoint: .topLeading, endPoint: .bottomTrailing
-                )
-            }
-        }
+        LinearGradient(
+            colors: [Color(white: 0.08), Color(white: 0.05)],
+            startPoint: .topLeading, endPoint: .bottomTrailing
+        )
     }
 
     private var borderColor: Color {
-        if isSuccess { return Color.green.opacity(0.3) }
-        if isFailed  { return Color.red.opacity(0.35) }
-        if isWorking { return Color.red.opacity(0.45) }
-        return Color(white: 0.12)
+        if isSuccess { return Color.white.opacity(0.40) }
+        if isFailed  { return Color(white: 0.25) }
+        if isWorking { return Color.white.opacity(0.50) }
+        return Color(white: 0.14)
     }
 
     @ViewBuilder
@@ -351,47 +327,47 @@ struct InjectButtonCard: View {
             HStack(spacing: 5) {
                 Text("\(Int(progress * 100))%")
                     .font(.system(size: 11, weight: .bold, design: .monospaced))
-                    .foregroundStyle(.red)
+                    .foregroundStyle(.white)
                 ProgressView()
                     .progressViewStyle(.circular)
                     .scaleEffect(0.55)
-                    .tint(.red)
+                    .tint(.white)
             }
         } else if isSuccess {
             HStack(spacing: 4) {
                 Image(systemName: "checkmark.circle.fill")
-                    .foregroundStyle(.green)
+                    .foregroundStyle(.white)
                     .font(.system(size: 13))
                 Text("DONE")
                     .font(.system(size: 10, weight: .bold))
-                    .foregroundStyle(.green)
+                    .foregroundStyle(.white)
                     .kerning(0.5)
             }
         } else if isFailed {
             HStack(spacing: 4) {
                 Image(systemName: "xmark.circle.fill")
-                    .foregroundStyle(.red)
+                    .foregroundStyle(Color(white: 0.6))
                     .font(.system(size: 13))
                 Text("FAIL")
                     .font(.system(size: 10, weight: .bold))
-                    .foregroundStyle(.red)
+                    .foregroundStyle(Color(white: 0.6))
                     .kerning(0.5)
             }
         } else {
             HStack(spacing: 4) {
                 Image(systemName: "play.fill")
                     .font(.system(size: 9))
-                    .foregroundStyle(Color.red.opacity(0.6))
+                    .foregroundStyle(.white)
                 Text("TAP")
                     .font(.system(size: 10, weight: .bold))
-                    .foregroundStyle(Color(white: 0.35))
+                    .foregroundStyle(Color(white: 0.50))
                     .kerning(0.5)
             }
         }
     }
 }
 
-// MARK: - Open Game Button Card
+// MARK: - Open Game Button Card (Monochrome Basic)
 
 struct OpenGameButtonCard: View {
     let button: OpenGameButton
@@ -405,7 +381,7 @@ struct OpenGameButtonCard: View {
             HStack(spacing: 8) {
                 Image(systemName: "gamecontroller.fill")
                     .font(.system(size: 11))
-                    .foregroundStyle(isWorking ? Color.red : Color(white: 0.5))
+                    .foregroundStyle(.white)
 
                 Text(button.name)
                     .font(.system(size: 12, weight: .bold))
@@ -418,11 +394,11 @@ struct OpenGameButtonCard: View {
                     ProgressView()
                         .progressViewStyle(.circular)
                         .scaleEffect(0.6)
-                        .tint(.red)
+                        .tint(.white)
                 } else {
                     Image(systemName: "chevron.right")
                         .font(.system(size: 9, weight: .semibold))
-                        .foregroundStyle(Color.red.opacity(0.6))
+                        .foregroundStyle(Color(white: 0.45))
                 }
             }
             .padding(.horizontal, 12)
@@ -430,14 +406,9 @@ struct OpenGameButtonCard: View {
             .background(
                 ZStack {
                     RoundedRectangle(cornerRadius: 10, style: .continuous)
-                        .fill(isWorking
-                              ? Color.red.opacity(0.10)
-                              : Color(white: 0.07))
+                        .fill(isWorking ? Color(white: 0.12) : Color(white: 0.07))
                     RoundedRectangle(cornerRadius: 10, style: .continuous)
-                        .stroke(isWorking
-                                ? Color.red.opacity(0.4)
-                                : Color(white: 0.12),
-                                lineWidth: 1)
+                        .stroke(isWorking ? Color.white.opacity(0.4) : Color(white: 0.14), lineWidth: 1)
                 }
             )
         }

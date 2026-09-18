@@ -42,11 +42,11 @@ jobs:
         echo "Found app: $APP_PATH"
         mkdir -p Payload
         cp -R "$APP_PATH" Payload/
-        zip -r CENA_X_REGS_EXTERNAL.ipa Payload
+        zip -r MOD_TOOLS.ipa Payload
 
     - name: Upload IPA
       uses: actions/upload-artifact@v4
       with:
-        name: CENA-X-REGS-EXTERNAL-unsigned-ipa
-        path: CENA_X_REGS_EXTERNAL.ipa
+        name: MOD-TOOLS-unsigned-ipa
+        path: MOD_TOOLS.ipa
         retention-days: 7

@@ -24,8 +24,8 @@ enum TargetGame: String, CaseIterable, Identifiable {
 
     var accentColor: Color {
         switch self {
-        case .freefireTH:  return .red
-        case .freefireMax: return Color(red: 1.0, green: 0.45, blue: 0.0)
+        case .freefireTH:  return .white
+        case .freefireMax: return Color(white: 0.85)
         }
     }
 }
@@ -126,10 +126,10 @@ struct InjectMenuView: View {
             ZStack {
                 Color.black.ignoresSafeArea()
 
-                // subtle top glow
+                // subtle top monochrome glow
                 VStack {
                     RadialGradient(
-                        colors: [Color.red.opacity(0.12), Color.clear],
+                        colors: [Color(white: 0.10), Color.clear],
                         center: .center,
                         startRadius: 0,
                         endRadius: 220
@@ -161,7 +161,7 @@ struct InjectMenuView: View {
                     HStack(spacing: 6) {
                         Image(systemName: "scope")
                             .font(.system(size: 12, weight: .bold))
-                            .foregroundStyle(.red)
+                            .foregroundStyle(.white)
                         Text("AIMBOT")
                             .font(.system(size: 15, weight: .black))
                             .foregroundStyle(.white)
@@ -184,7 +184,7 @@ struct InjectMenuView: View {
             // section label
             HStack {
                 Rectangle()
-                    .fill(Color.red.opacity(0.5))
+                    .fill(Color.white.opacity(0.6))
                     .frame(width: 3, height: 12)
                     .clipShape(Capsule())
                 Text("TARGET")
@@ -256,15 +256,15 @@ struct InjectMenuView: View {
             // section header
             HStack(spacing: 8) {
                 Rectangle()
-                    .fill(Color.red.opacity(0.5))
+                    .fill(Color.white.opacity(0.6))
                     .frame(width: 3, height: 12)
                     .clipShape(Capsule())
                 Text("AIMBOT")
                     .font(.system(size: 10, weight: .black))
-                    .foregroundStyle(Color.red.opacity(0.85))
+                    .foregroundStyle(Color.white.opacity(0.85))
                     .kerning(2)
                 Rectangle()
-                    .fill(Color.red.opacity(0.15))
+                    .fill(Color(white: 0.16))
                     .frame(height: 1)
             }
             .padding(.horizontal, 16)

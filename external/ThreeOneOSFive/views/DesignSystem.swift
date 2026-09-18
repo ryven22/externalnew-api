@@ -1,13 +1,10 @@
 import SwiftUI
 
 enum AppTheme {
-    // Accent: bright red in all modes
-    static let accent = Color(
-        uiColor: UIColor { _ in
-            UIColor(red: 1.00, green: 0.07, blue: 0.07, alpha: 1.00)  // #FF1212
-        }
-    )
-    // Pure black background in dark mode, very dark in light mode
+    // Accent: pure white in monochrome theme
+    static let accent = Color.white
+
+    // Pure black background
     static let pageBackground = Color(
         uiColor: UIColor { traits in
             traits.userInterfaceStyle == .dark
@@ -15,14 +12,14 @@ enum AppTheme {
                 : UIColor(red: 0.08, green: 0.08, blue: 0.08, alpha: 1.00)  // #141414
         }
     )
-    // Slightly lighter black for console/secondary surfaces
+
+    // Neutral dark surface for console/secondary surfaces
     static let consoleBackground = Color(
-        uiColor: UIColor { traits in
-            traits.userInterfaceStyle == .dark
-                ? UIColor(red: 0.09, green: 0.00, blue: 0.00, alpha: 1.00)  // #170000 dark red-black
-                : UIColor(red: 0.12, green: 0.02, blue: 0.02, alpha: 1.00)  // #1F0303
+        uiColor: UIColor { _ in
+            UIColor(white: 0.05, alpha: 1.00)
         }
     )
+
     static let pageInset: CGFloat = 16
     static let rowIconSize: CGFloat = 17
     static let rowIconFrame: CGFloat = 28
@@ -100,7 +97,8 @@ struct AppLogo: View {
 
     var body: some View {
         Group {
-            if let icon = UIImage(named: "AppIcon60x60")
+            if let icon = UIImage(named: "ModToolsLogo")
+                ?? UIImage(named: "AppIcon60x60")
                 ?? Bundle.main.path(forResource: "AppIcon60x60@2x", ofType: "png").flatMap(UIImage.init(contentsOfFile:))
                 ?? UIImage(named: "AppIcon") {
                 Image(uiImage: icon)
@@ -111,7 +109,7 @@ struct AppLogo: View {
                     .font(.title2.weight(.semibold))
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(AppTheme.accent)
+                    .background(Color(white: 0.15))
             }
         }
         .frame(width: size, height: size)

@@ -80,18 +80,18 @@ struct ContentView: View {
                         VStack(spacing: 4) {
                             Image(systemName: section.systemImage)
                                 .font(.system(size: 20, weight: isSelected ? .bold : .regular))
-                                .foregroundStyle(isSelected ? Color.red : Color(white: 0.45))
-                                .scaleEffect(isSelected ? 1.1 : 1.0)
+                                .foregroundStyle(isSelected ? Color.white : Color(white: 0.45))
+                                .scaleEffect(isSelected ? 1.08 : 1.0)
                                 .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isSelected)
                             Text(language.text(section.titleKey))
                                 .font(.system(size: 10, weight: isSelected ? .semibold : .regular))
-                                .foregroundStyle(isSelected ? Color.red : Color(white: 0.45))
+                                .foregroundStyle(isSelected ? Color.white : Color(white: 0.45))
                         }
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 10)
                         .background(
                             isSelected
-                                ? Color.red.opacity(0.08)
+                                ? Color.white.opacity(0.12)
                                 : Color.clear
                         )
                         .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
@@ -104,11 +104,11 @@ struct ContentView: View {
             .padding(.bottom, 20)
             .padding(.top, 6)
             .background(.ultraThinMaterial)
-            .background(Color.black.opacity(0.85))
+            .background(Color.black.opacity(0.92))
             .overlay(
                 Rectangle()
                     .frame(height: 0.5)
-                    .foregroundStyle(Color.red.opacity(0.2)),
+                    .foregroundStyle(Color(white: 0.16)),
                 alignment: .top
             )
         }
@@ -140,7 +140,7 @@ struct ContentView: View {
                     )
                 }
             }
-            .navigationTitle("CENA x REGS EXTERNAL")
+            .navigationTitle("MOD TOOLS")
             .navigationSplitViewColumnWidth(min: 210, ideal: 240, max: 300)
         } detail: {
             sectionContent(selectedVisibleSection)
@@ -286,20 +286,22 @@ private struct DashboardView: View {
                 ToolbarItem(placement: .principal) {
                     VStack(spacing: 1) {
                         HStack(spacing: 5) {
-                            Text("CENA x REGS EXTERNAL")
-                                .font(.system(size: 13, weight: .black))
-                                .foregroundStyle(.red)
+                            Text("MOD TOOLS")
+                                .font(.system(size: 14, weight: .black))
+                                .foregroundStyle(.white)
+                                .kerning(1.2)
                             Text("PRO")
                                 .font(.system(size: 9, weight: .black))
-                                .foregroundStyle(.white)
+                                .foregroundStyle(.black)
                                 .padding(.horizontal, 4)
                                 .padding(.vertical, 1)
-                                .background(Color.red)
+                                .background(Color.white)
                                 .clipShape(RoundedRectangle(cornerRadius: 3, style: .continuous))
                         }
-                        Text("by </> CENA x REGS")
-                            .font(.system(size: 10, weight: .medium))
-                            .foregroundStyle(.red.opacity(0.7))
+                        Text("SECURITY ENGINE")
+                            .font(.system(size: 9, weight: .semibold))
+                            .foregroundStyle(Color(white: 0.45))
+                            .kerning(1.5)
                     }
                 }
 
@@ -327,35 +329,35 @@ private struct DashboardView: View {
                 ZStack {
                     RoundedRectangle(cornerRadius: 12, style: .continuous)
                         .fill(Color(white: 0.1))
-                        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(Color.red.opacity(0.3), lineWidth: 1))
+                        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(Color.white.opacity(0.2), lineWidth: 1))
                         .frame(width: 48, height: 48)
-                    if let icon = UIImage(named: "AppIcon60x60") ?? UIImage(named: "AppIcon") {
+                    if let icon = UIImage(named: "ModToolsLogo") ?? UIImage(named: "AppIcon60x60") ?? UIImage(named: "AppIcon") {
                         Image(uiImage: icon)
                             .resizable()
                             .scaledToFill()
                             .frame(width: 48, height: 48)
                             .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                     } else {
-                        Text("CR")
+                        Text("MT")
                             .font(.system(size: 18, weight: .black))
-                            .foregroundStyle(.red)
+                            .foregroundStyle(.white)
                     }
                 }
                 VStack(alignment: .leading, spacing: 3) {
                     HStack(spacing: 6) {
-                        Text("CENA x REGS EXTERNAL")
+                        Text("MOD TOOLS")
                             .font(.system(size: 15, weight: .heavy))
                             .foregroundStyle(.white)
                         Text("PRO")
                             .font(.system(size: 10, weight: .black))
-                            .foregroundStyle(.white)
+                            .foregroundStyle(.black)
                             .padding(.horizontal, 5)
                             .padding(.vertical, 2)
-                            .background(Color.red)
+                            .background(Color.white)
                             .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
                     }
-                    Text("</> CENA x REGS")
-                        .font(.system(size: 12, weight: .regular))
+                    Text("SECURITY UTILITY ENGINE")
+                        .font(.system(size: 11, weight: .semibold))
                         .foregroundStyle(Color(white: 0.5))
                     Text("v\(AppInfo.appVersion)")
                         .font(.system(size: 11))
@@ -372,7 +374,7 @@ private struct DashboardView: View {
             if let state = license.licenseState {
                 HStack {
                     Image(systemName: "key.fill")
-                        .foregroundStyle(.red)
+                        .foregroundStyle(.white)
                     if showLicenseKey {
                         Text(state.key)
                             .font(.system(size: 13, weight: .medium, design: .monospaced))
@@ -398,7 +400,7 @@ private struct DashboardView: View {
 
                 HStack {
                     Image(systemName: "clock.fill")
-                        .foregroundStyle(state.daysRemaining <= 1 ? .red : .green)
+                        .foregroundStyle(state.daysRemaining <= 1 ? Color(white: 0.5) : Color.white)
                     Text("Expires")
                         .foregroundStyle(.secondary)
                     Spacer()
@@ -408,7 +410,7 @@ private struct DashboardView: View {
                             .foregroundStyle(.primary)
                         Text("\(state.daysRemaining) day\(state.daysRemaining == 1 ? "" : "s") remaining")
                             .font(.caption)
-                            .foregroundStyle(state.daysRemaining <= 1 ? .red : .green)
+                            .foregroundStyle(state.daysRemaining <= 1 ? Color(white: 0.5) : Color.white)
                     }
                 }
                 .listRowBackground(Color(white: 0.07))
@@ -417,13 +419,13 @@ private struct DashboardView: View {
                     showLogoutConfirm = true
                 } label: {
                     Label("Logout / Change Key", systemImage: "rectangle.portrait.and.arrow.right")
-                        .foregroundStyle(.red)
+                        .foregroundStyle(Color(white: 0.75))
                 }
                 .listRowBackground(Color(white: 0.07))
             }
         } header: {
             Text("LICENSE")
-                .foregroundStyle(.red.opacity(0.8))
+                .foregroundStyle(Color(white: 0.6))
         }
     }
 
@@ -443,7 +445,7 @@ private struct DashboardView: View {
                 Text("Compatibility")
                 Spacer()
                 Text(appState.isSupported ? "Supported" : "Unsupported")
-                    .foregroundStyle(appState.isSupported ? Color.green : Color.red)
+                    .foregroundStyle(appState.isSupported ? Color.white : Color(white: 0.5))
             }
             .listRowBackground(Color(white: 0.07))
 
@@ -460,14 +462,14 @@ private struct DashboardView: View {
                         }
                     } else {
                         Text(language.text(appState.exploitStatus.isSuccess ? "dashboard.kernel_active" : "dashboard.kernel_inactive"))
-                            .foregroundStyle(appState.exploitStatus.isSuccess ? Color.green : Color.secondary)
+                            .foregroundStyle(appState.exploitStatus.isSuccess ? Color.white : Color.secondary)
                     }
                 }
                 .listRowBackground(Color(white: 0.07))
             }
         } header: {
             Text("DEVICE")
-                .foregroundStyle(.red.opacity(0.8))
+                .foregroundStyle(Color(white: 0.6))
         } footer: {
             Text("Support iOS 15 – 27")
                 .foregroundStyle(Color(white: 0.4))
