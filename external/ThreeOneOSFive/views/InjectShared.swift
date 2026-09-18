@@ -19,6 +19,29 @@ struct InjectButton: Identifiable {
     let resourceSubfolder: String
     var launchAfterInject: Bool = false
     var additionalFiles: [InjectFileItem] = []
+    var isDeleteAction: Bool = false
+
+    init(
+        name: String,
+        category: String,
+        bundleID: String,
+        targetPath: String,
+        resourceFileName: String = "",
+        resourceSubfolder: String = "",
+        launchAfterInject: Bool = false,
+        additionalFiles: [InjectFileItem] = [],
+        isDeleteAction: Bool = false
+    ) {
+        self.name = name
+        self.category = category
+        self.bundleID = bundleID
+        self.targetPath = targetPath
+        self.resourceFileName = resourceFileName
+        self.resourceSubfolder = resourceSubfolder
+        self.launchAfterInject = launchAfterInject
+        self.additionalFiles = additionalFiles
+        self.isDeleteAction = isDeleteAction
+    }
 
     var allFiles: [InjectFileItem] {
         var list = [

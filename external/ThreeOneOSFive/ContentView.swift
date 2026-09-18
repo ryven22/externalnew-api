@@ -140,7 +140,7 @@ struct ContentView: View {
                     )
                 }
             }
-            .navigationTitle("REGS EXTERNAL PRO")
+            .navigationTitle("CENA x REGS EXTERNAL")
             .navigationSplitViewColumnWidth(min: 210, ideal: 240, max: 300)
         } detail: {
             sectionContent(selectedVisibleSection)
@@ -286,7 +286,7 @@ private struct DashboardView: View {
                 ToolbarItem(placement: .principal) {
                     VStack(spacing: 1) {
                         HStack(spacing: 5) {
-                            Text("REGS EXTERNAL")
+                            Text("CENA x REGS EXTERNAL")
                                 .font(.system(size: 13, weight: .black))
                                 .foregroundStyle(.red)
                             Text("PRO")
@@ -297,7 +297,7 @@ private struct DashboardView: View {
                                 .background(Color.red)
                                 .clipShape(RoundedRectangle(cornerRadius: 3, style: .continuous))
                         }
-                        Text("by </> REGS XD")
+                        Text("by </> CENA x REGS")
                             .font(.system(size: 10, weight: .medium))
                             .foregroundStyle(.red.opacity(0.7))
                     }
@@ -336,14 +336,14 @@ private struct DashboardView: View {
                             .frame(width: 48, height: 48)
                             .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                     } else {
-                        Text("RX")
+                        Text("CR")
                             .font(.system(size: 18, weight: .black))
                             .foregroundStyle(.red)
                     }
                 }
                 VStack(alignment: .leading, spacing: 3) {
                     HStack(spacing: 6) {
-                        Text("REGS EXTERNAL")
+                        Text("CENA x REGS EXTERNAL")
                             .font(.system(size: 15, weight: .heavy))
                             .foregroundStyle(.white)
                         Text("PRO")
@@ -354,7 +354,7 @@ private struct DashboardView: View {
                             .background(Color.red)
                             .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
                     }
-                    Text("</> REGS XD")
+                    Text("</> CENA x REGS")
                         .font(.system(size: 12, weight: .regular))
                         .foregroundStyle(Color(white: 0.5))
                     Text("v\(AppInfo.appVersion)")

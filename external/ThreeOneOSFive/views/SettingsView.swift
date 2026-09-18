@@ -17,7 +17,7 @@ struct SettingsView: View {
                             AppLogo()
                             VStack(alignment: .leading, spacing: 3) {
                                 HStack(spacing: 6) {
-                                    Text("REGS EXTERNAL")
+                                    Text("CENA x REGS EXTERNAL")
                                         .font(.system(size: 15, weight: .heavy))
                                         .foregroundStyle(.white)
                                     Text("PRO")
@@ -103,7 +103,7 @@ struct SettingsView: View {
 
                     // Credits
                     Section(header: sectionHeader(language.text("settings.credits"))) {
-                        creditsRow(name: "</> REGS XD", role: language.text("credit.yangjiii"), url: "https://github.com/YangJiiii/3105")
+                        creditsRow(name: "</> CENA x REGS", role: language.text("credit.yangjiii"), url: "https://github.com/YangJiiii/3105")
                         creditsRow(name: "0xjohnnydev", role: language.text("credit.filzaslop"), url: "https://github.com/0xjohnnydev/FilzaSlop")
                         creditsRow(name: "LeminLimez", role: language.text("credit.pocket_poster"), url: "https://github.com/leminlimez/Pocket-Poster")
                         creditsRow(name: "CrazyMind90", role: language.text("credit.sandbox_escape"), url: "https://github.com/CrazyMind90")

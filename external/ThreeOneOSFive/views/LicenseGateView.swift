@@ -81,7 +81,7 @@ struct KeyEntryView: View {
                                 .frame(width: 96, height: 96)
                                 .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
                         } else {
-                            Text("RX")
+                            Text("CR")
                                 .font(.system(size: 38, weight: .black))
                                 .foregroundStyle(.red)
                         }
@@ -90,7 +90,7 @@ struct KeyEntryView: View {
 
                     // Title
                     HStack(spacing: 8) {
-                        Text("REGS EXTERNAL")
+                        Text("CENA x REGS EXTERNAL")
                             .font(.system(size: 22, weight: .black))
                             .foregroundStyle(.white)
                             .kerning(1.2)
@@ -108,7 +108,7 @@ struct KeyEntryView: View {
                         Rectangle()
                             .fill(Color.red.opacity(0.25))
                             .frame(height: 1)
-                        Text("BY REGS XD")
+                        Text("BY CENA x REGS")
                             .font(.system(size: 9, weight: .semibold))
                             .foregroundStyle(Color(white: 0.3))
                             .kerning(2)

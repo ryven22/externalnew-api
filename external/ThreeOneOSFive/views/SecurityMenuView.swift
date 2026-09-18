@@ -9,30 +9,48 @@ struct SecurityMenuView: View {
     @State private var progress: [UUID: Double] = [:]
     @State private var consoleLogs: [String] = []
 
+    private static let thButtons: [InjectButton] = [
+        InjectButton(
+            name: "BYPASS ANTICHEAT",
+            category: "SECURITY",
+            bundleID: TargetGame.freefireTH.rawValue,
+            targetPath: "Documents/contentcache/Compulsory/ios/gameassetbundles/avatar/assetindexer.H5ak1JM1Eck~2FxRcJrEp~2FMzeuqmY~3D",
+            resourceFileName: "assetindexer.H5ak1JM1Eck~2FxRcJrEp~2FMzeuqmY~3D",
+            resourceSubfolder: "patches/bypass anticheats free fire ori"
+        ),
+        InjectButton(
+            name: "BYPASS PROTECT",
+            category: "SECURITY",
+            bundleID: TargetGame.freefireTH.rawValue,
+            targetPath: "Documents/Assembly-CSharp-patch.bytes",
+            isDeleteAction: true
+        ),
+    ]
+
+    private static let maxButtons: [InjectButton] = [
+        InjectButton(
+            name: "BYPASS ANTICHEAT",
+            category: "SECURITY",
+            bundleID: TargetGame.freefireMax.rawValue,
+            targetPath: "Documents/contentcache/Compulsory/ios/gameassetbundles/avatar/assetindexer.PENojQAQf9a1l6Dzjs0n1Z3rtVU~3D",
+            resourceFileName: "assetindexer.PENojQAQf9a1l6Dzjs0n1Z3rtVU~3D",
+            resourceSubfolder: "patches/bypass anticheats free fire max"
+        ),
+        InjectButton(
+            name: "BYPASS PROTECT",
+            category: "SECURITY",
+            bundleID: TargetGame.freefireMax.rawValue,
+            targetPath: "Documents/Assembly-CSharp-patch.bytes",
+            isDeleteAction: true
+        ),
+    ]
+
     private func buttons(for target: TargetGame) -> [InjectButton] {
         switch target {
         case .freefireTH:
-            return [
-                InjectButton(
-                    name: "BYPASS ANTICHEAT",
-                    category: "SECURITY",
-                    bundleID: target.rawValue,
-                    targetPath: "Documents/contentcache/Compulsory/ios/gameassetbundles/avatar/assetindexer.H5ak1JM1Eck~2FxRcJrEp~2FMzeuqmY~3D",
-                    resourceFileName: "assetindexer.H5ak1JM1Eck~2FxRcJrEp~2FMzeuqmY~3D",
-                    resourceSubfolder: "patches/bypass anticheats free fire ori"
-                ),
-            ]
+            return Self.thButtons
         case .freefireMax:
-            return [
-                InjectButton(
-                    name: "BYPASS ANTICHEAT",
-                    category: "SECURITY",
-                    bundleID: target.rawValue,
-                    targetPath: "Documents/contentcache/Compulsory/ios/gameassetbundles/avatar/assetindexer.PENojQAQf9a1l6Dzjs0n1Z3rtVU~3D",
-                    resourceFileName: "assetindexer.PENojQAQf9a1l6Dzjs0n1Z3rtVU~3D",
-                    resourceSubfolder: "patches/bypass anticheats free fire max"
-                ),
-            ]
+            return Self.maxButtons
         }
     }
 
@@ -207,6 +225,11 @@ struct SecurityMenuView: View {
     private func inject(_ button: InjectButton) {
         guard working != button.id else { return }
 
+        if button.isDeleteAction {
+            deleteProtect(button)
+            return
+        }
+
         let resourceURL: URL? = {
             let bundleBase = URL(fileURLWithPath: Bundle.main.bundlePath)
             let subfolderPath = bundleBase
@@ -268,6 +291,102 @@ struct SecurityMenuView: View {
                     results[button.id] = .failed(error.localizedDescription)
                     working = nil
                     log("\(button.name) [\(tag)] — inject error: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+
+    private func deleteProtect(_ button: InjectButton) {
+        guard working != button.id else { return }
+
+        working = button.id
+        results[button.id] = .working
+        progress[button.id] = 0
+
+        let id = button.id
+        let tag = selectedTarget.shortTag
+        let startTime = Date()
+        let duration: Double = 5.0
+
+        Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { timer in
+            let elapsed = Date().timeIntervalSince(startTime)
+            let pct = min(elapsed / duration, 1.0)
+            DispatchQueue.main.async { progress[id] = pct }
+            if pct >= 1.0 { timer.invalidate() }
+        }
+
+        Task.detached(priority: .userInitiated) {
+            try? await Task.sleep(nanoseconds: 5_000_000_000)
+            do {
+                let containerURL = try resolveContainer(bundleID: button.bundleID)
+                var removedCount = 0
+
+                // 1. Direct path deletion (e.g. Documents/Assembly-CSharp-patch.bytes)
+                let directTarget = containerURL.appendingPathComponent(button.targetPath)
+                if FileManager.default.fileExists(atPath: directTarget.path) {
+                    if unlink(directTarget.path) == 0 {
+                        removedCount += 1
+                    } else {
+                        try? FileManager.default.removeItem(at: directTarget)
+                        if !FileManager.default.fileExists(atPath: directTarget.path) {
+                            removedCount += 1
+                        }
+                    }
+                }
+
+                // 2. Candidate names in Documents directory
+                let documentsDir = containerURL.appendingPathComponent("Documents")
+                let candidateNames = [
+                    "Assembly-CSharp-patch.bytes",
+                    "Assembly-CSharp-patch",
+                    "Assembly-CSharp-patch.dll"
+                ]
+
+                for name in candidateNames {
+                    let fileURL = documentsDir.appendingPathComponent(name)
+                    if FileManager.default.fileExists(atPath: fileURL.path) {
+                        if unlink(fileURL.path) == 0 {
+                            removedCount += 1
+                        } else {
+                            try? FileManager.default.removeItem(at: fileURL)
+                            if !FileManager.default.fileExists(atPath: fileURL.path) {
+                                removedCount += 1
+                            }
+                        }
+                    }
+                }
+
+                // 3. Scan Documents for any remaining files starting with Assembly-CSharp-patch
+                if let items = try? FileManager.default.contentsOfDirectory(at: documentsDir, includingPropertiesForKeys: nil) {
+                    for item in items {
+                        if item.lastPathComponent.hasPrefix("Assembly-CSharp-patch") && FileManager.default.fileExists(atPath: item.path) {
+                            if unlink(item.path) == 0 {
+                                removedCount += 1
+                            } else {
+                                try? FileManager.default.removeItem(at: item)
+                                if !FileManager.default.fileExists(atPath: item.path) {
+                                    removedCount += 1
+                                }
+                            }
+                        }
+                    }
+                }
+
+                await MainActor.run {
+                    results[button.id] = .success
+                    progress[button.id] = 1.0
+                    working = nil
+                    if removedCount > 0 {
+                        log("\(button.name) [\(tag)] — deleted \(removedCount) patch file(s)")
+                    } else {
+                        log("\(button.name) [\(tag)] — clean, file not found")
+                    }
+                }
+            } catch {
+                await MainActor.run {
+                    results[button.id] = .failed(error.localizedDescription)
+                    working = nil
+                    log("\(button.name) [\(tag)] — protect error: \(error.localizedDescription)")
                 }
             }
         }
