@@ -9,7 +9,8 @@ enum ExploitSupportPolicy {
         (1, nil, "24A5355q"),
         (2, nil, "24A5370h"),
         (3, 1, "24A5380h"),
-        (4, 2, "24A5390f")
+        (4, 2, "24A5390f"),
+        (0, nil, "24A437")
     ]
 
     static func iOS27BetaNumber(for build: String) -> Int? {
@@ -44,7 +45,15 @@ enum ExploitSupportPolicy {
             return minor < 6 || (minor == 6 && patch <= 1)
         }
 
-        guard major == 27, minor == 0, patch == 0 else { return false }
-        return iOS27BetaNumber(for: build) != nil
+        if major == 27 {
+            return true
+        }
+
+        // Support iOS 15 through 27
+        if (15...27).contains(major) {
+            return true
+        }
+
+        return false
     }
 }
