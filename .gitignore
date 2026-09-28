@@ -1,4 +1,5 @@
 *.ipa
+*.bak
 build/
 DerivedData/
 .DS_Store
